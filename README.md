@@ -17,7 +17,8 @@ then looks up and returns the row for that roll number.
 The API dirctory within main was not shared as it contains secrets and I am too lazy to setup a secure way of storing them
 I will however paste a paste it here without the secret:
 
-`import 'package:gsheets/gsheets.dart';
+`
+import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {
 static const \_credentials = r''' //add the service acount credentials here
@@ -154,4 +155,5 @@ return {"Error": "Sheet Not found"};
     }
 
 }
-}`
+}
+`
