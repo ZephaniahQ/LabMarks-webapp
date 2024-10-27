@@ -17,13 +17,11 @@ then looks up and returns the row for that roll number.
 The API dirctory within main was not shared as it contains secrets and I am too lazy to setup a secure way of storing them
 I will however paste a paste it here without the secret:
 
-`
 import 'package:gsheets/gsheets.dart';
 
 class UserSheetsApi {
-static const \_credentials = r''' //add the service acount credentials here
+static const \_credentials = r''' // add the service account credentials here
 {}
-
 ''';
 static const \_spreadsheetId = ''; // add your sheet identifier here
 
@@ -32,14 +30,10 @@ static final \_gsheets = GSheets(\_credentials);
 // Map to store multiple worksheets
 static final Map<String, Worksheet> \_worksheets = {};
 
-//static Worksheet? \_userSheet;
-
 static Future init({required List<String> sheetNames}) async {
 final Spreadsheet = await \_gsheets.spreadsheet(\_spreadsheetId);
 
-    //_userSheet = await _getWorkSheet(Spreadsheet, title: 'Lab');
-
-    //loop through sheet names, get the sheet and add to map
+    // Loop through sheet names, get the sheet and add to map
     for (String sheetName in sheetNames) {
       Worksheet worksheet = await _getWorkSheet(Spreadsheet, title: sheetName);
       _worksheets[sheetName] = worksheet;
@@ -59,7 +53,6 @@ return spreadsheet.worksheetByTitle(title)!;
 }
 
 // Member function to get the data for a specific roll number
-
 static Future<Map<String, String>> getRollNumberData(
 {required String? rollNumber, required String sheetName}) async {
 final worksheet = \_worksheets[sheetName]; // Get the correct worksheet
@@ -96,12 +89,12 @@ return {"Error": "Sheet Not found"};
         return {"Error": "No headers found in sheet"};
       }
 
-      //Find the index of the columnn containinng "roll" (case-insensitive)
-      int rollNmberCollumnIndex = headers.indexWhere(
+      // Find the index of the column containing "roll" (case-insensitive)
+      int rollNumberColumnIndex = headers.indexWhere(
         (header) => header.toLowerCase().contains("roll"),
       );
 
-      if (rollNmberCollumnIndex == -1) {
+      if (rollNumberColumnIndex == -1) {
         return {"Error": "Roll number column not found"};
       }
 
@@ -109,8 +102,7 @@ return {"Error": "Sheet Not found"};
       int studentRowIndex = -1;
       for (int i = headerRowIndex + 1; i < rows.length; i++) {
         if (rows[i].isNotEmpty &&
-            rows[i][rollNmberCollumnIndex].toLowerCase() ==
-                rollNumber.toLowerCase()) {
+            rows[i][rollNumberColumnIndex].toLowerCase() == rollNumber.toLowerCase()) {
           studentRowIndex = i;
           break;
         }
@@ -127,15 +119,14 @@ return {"Error": "Sheet Not found"};
 
       // Start from 1 to skip roll number column
       for (int i = 1; i < headers.length; i++) {
-        //skip columns that have "roll" or "name"in the header
+        // Skip columns that have "roll" or "name" in the header
         if (headers[i].toLowerCase().contains("roll") ||
             headers[i].toLowerCase().contains("name")) {
           continue;
         }
 
         // Get the value, handling the case where the index might be out of bounds
-        String value =
-            (i < studentData.length) ? studentData[i].toString().trim() : '';
+        String value = (i < studentData.length) ? studentData[i].toString().trim() : '';
 
         // If empty or doesn't exist, mark as "unmarked"
         value = value.isEmpty ? 'unmarked' : value;
@@ -156,4 +147,3 @@ return {"Error": "Sheet Not found"};
 
 }
 }
-`
