@@ -15,7 +15,7 @@ then looks up and returns the row for that roll number.
 ## Sheets API Usage:
 
 The API dirctory within main was not shared as it contains secrets and I am too lazy to setup a secure way of storing them
-I will however paste a paste it here without the secret:
+I will however paste it here without the secret:
 
 ```
 
@@ -147,6 +147,7 @@ return {"Error": "Sheet Not found"};
       return {"Error": "Failed to fetch data: ${e.toString()}"};
     }
 
+}
 }
 
 ```
